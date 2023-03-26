@@ -1,0 +1,111 @@
+---
+title: "Assignment09_Data605"
+author: "Mahmud Hasan Al Raji"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1.(Exercise-11,Page-363) The price of one share of stock in the Pilsdorff Beer Company (see Exercise 8.2.12) is given by Yn on the nth day of the year. Finn observes that the differences Xn = Yn+1 − Yn appear to be independent random variables with a common distribution having mean µ = 0 and variance σ2 = 1/4. If Y1 = 100, estimate the probability that Y365 is (a) ≥ 100. (b) ≥ 110. (c) ≥ 120.
+
+```{r }
+# Simulation of 365 daily stock prices, where the daily price changes are modeled as independent and identically distributed normal random variables with mean=0 and variance = 1/4.
+
+set.seed(123)
+
+mu <- 0
+variance <- 1/4
+n <- 365 
+Y <- numeric(n) #  Creating  numeric vector of length n with all elements set to 0
+Y[1] <- 100 # Assigning the price of the stock on the first day of the simulation
+
+X <- rnorm(n-1, mean = mu, sd = sqrt(variance)) 
+
+# Looping for calculating the stock prices for each day in the simulation by adding the daily price change X[i-1] to the previous day's stock price Y[i-1].
+
+for (i in 2:n) {
+  Y[i] <- Y[i-1] + X[i-1]
+}   
+
+# a. probability of Y365 being >= 100
+
+a<-mean(Y[n] >= 100)
+a
+# b. Probability of Y365 being >= 110
+
+b<-mean(Y[n] >= 110)
+b
+# c. Probability of Y365 being >= 120
+
+c<-mean(Y[n] >= 120)
+c
+```
+
+# 2. Calculate the expected value and variance of the binomial distribution using the moment generating function.
+
+# Ans-2:
+
+The moment generating function of the binomial distribution with parameters n and p is given by: M(t) = (pe^t + 1 - p)^n
+
+Calculating the first derivative of the moment generating function with respect to t and evaluating the function at t = 0 we get the expected value:
+
+M'(t) = npe^t(p e^t + 1 - p)^(n-1)
+M'(0) = np
+
+Hence, the expected value of the binomial distribution with parameters n and p is np.
+
+Again, calculating the second derivative of the moment generating function with respect to t, evaluated at t = 0, we get the variance:
+
+M"(t) = np e^t.(n-1).(p e^t + 1 - p)^(n-2).p e^t+ (p e^t + 1 - p)^(n-1).np e^t 
+M"(0) = n(n-1)p^2 + np
+
+Therefore, the variance of the binomial distribution with parameters n and p is n(n-1)p^2 + np.
+
+
+# 3. Calculate the expected value and variance of the exponential distribution using the moment generating function.
+
+# Ans-3:
+
+The moment generating function of the exponential distribution with rate parameter $\lambda$ is:
+
+M(t) = E(e^(tX)) = $\int$[0,$\infty$] e^(tx) $\lambda$e^(-$\lambda$x) dx
+= $\lambda$ / ($\lambda$ - t), for t < $\lambda$
+
+Now,the expected (first moment) value can be found by evaluating the first derivative of the moment generating function at t=0:
+
+M'(0) = [d/dt ($\lambda$ / ($\lambda$- t))]t = 0
+
+= $\lambda$ / ($\lambda$ - 0)^2
+
+= 1 / $\lambda$
+
+Therefore, the expected value of the exponential distribution is 1/$\lambda$.
+
+
+The second moment can be found by evaluating the second derivative of the moment generating function at t=0:
+
+M"(0) = [d^2 / dt^2 ($\lambda$ / ( $\lambda$- t))]t = 0
+
+= 2$\lambda$ / ($\lambda$ - 0)^3
+
+= 2 / $\lambda$^2
+
+Now, the variance of the exponential distribution is:
+
+variance = M'(0)- {M"(0)}^2
+
+= 2 / $\lambda$^2 - (1/$\lambda$)^2
+
+= 1/$\lambda$^2
+
+Hence, the variance is 1/$\lambda$^2.
+
+
+
+
+
+
+
